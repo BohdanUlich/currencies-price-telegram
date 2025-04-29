@@ -20,7 +20,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Build project
         run: npm run build
@@ -28,5 +30,5 @@ jobs:
       - name: Send crypto updates
         run: node dist/index.js
         env:
-          TELEGRAM_BOT_TOKEN: ${{ env.TELEGRAM_BOT_TOKEN }}
-          COINGECKO_API_URL: ${{ env.COINGECKO_API_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          COINGECKO_API_URL: ${{ secrets.COINGECKO_API_URL }}
