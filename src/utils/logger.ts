@@ -9,15 +9,12 @@ export const logger = winston.createLogger({
     winston.format.errors({ stack: true }),
     winston.format.printf(({ level, message, timestamp }) => {
       return `${timestamp} ${level.toUpperCase()}: ${message}`;
-    }),
+    })
   ),
   transports: [
     // Console logging
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple(),
-      ),
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
     }),
     // File logging
     new winston.transports.File({

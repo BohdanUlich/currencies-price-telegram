@@ -4,8 +4,9 @@ FROM node:18-alpine
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
 # Install ALL dependencies (including dev dependencies for build)
 RUN npm ci

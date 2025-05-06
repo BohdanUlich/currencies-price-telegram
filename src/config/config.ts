@@ -13,8 +13,7 @@ interface Config {
 // Configuration settings
 export const config: Config = {
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
-  coingeckoApiUrl:
-    process.env.COINGECKO_API_URL || 'https://api.coingecko.com/api/v3',
+  coingeckoApiUrl: process.env.COINGECKO_API_URL || 'https://api.coingecko.com/api/v3',
   logLevel: process.env.LOG_LEVEL || 'info',
 };
 
