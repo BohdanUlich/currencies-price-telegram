@@ -1,0 +1,17 @@
+# Use the official Node.js image
+FROM node:18-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies)
+RUN npm ci
+
+# Set environment to development
+ENV NODE_ENV=development
+
+# Command to run the application in development mode
+CMD ["npm", "run", "dev"] 
