@@ -1,6 +1,6 @@
-import axios from "axios";
-import { config } from "../config/config";
-import { logger } from "../utils/logger";
+import axios from 'axios';
+import { config } from '../config/config';
+import { logger } from '../utils/logger';
 
 export interface CryptoCurrency {
   id: string;
@@ -26,14 +26,14 @@ export class CoinGeckoClient {
    * @param limit Number of cryptocurrencies to fetch
    * @returns Array of cryptocurrency data
    */
-  async getTopCryptocurrencies(limit: number = 30): Promise<CryptoCurrency[]> {
+  async getTopCryptocurrencies(limit: number): Promise<CryptoCurrency[]> {
     try {
       const params: Record<string, string | number> = {
-        vs_currency: "usd",
-        order: "market_cap_desc",
+        vs_currency: 'usd',
+        order: 'market_cap_desc',
         per_page: limit,
         page: 1,
-        price_change_percentage: "24h",
+        price_change_percentage: '24h',
       };
 
       // Add API key if available
@@ -55,9 +55,7 @@ export class CoinGeckoClient {
 
       // Handle rate limiting explicitly
       if (axios.isAxiosError(error) && error.response?.status === 429) {
-        logger.error(
-          "CoinGecko API rate limit exceeded. Consider using an API key."
-        );
+        logger.error('CoinGecko API rate limit exceeded. Consider using an API key.');
       }
 
       return [];
@@ -75,6 +73,45 @@ export class CoinGeckoClient {
     } catch (error) {
       logger.error(`CoinGecko API ping failed: ${error}`);
       return false;
+    }
+  }
+
+  /**
+   * Get cryptocurrency data by list of IDs
+   * @param ids Array of cryptocurrency IDs
+   * @returns Array of cryptocurrency data
+   */
+  async getCryptocurrenciesByIds(ids: string[]): Promise<CryptoCurrency[]> {
+    try {
+      const params: Record<string, string | number> = {
+        vs_currency: 'usd',
+        ids: ids.join(','),
+        price_change_percentage: '24h',
+      };
+
+      // Add API key if available
+      if (this.apiKey) {
+        params.x_cg_api_key = this.apiKey;
+      }
+
+      const response = await axios.get(`${this.baseUrl}/coins/markets`, {
+        params,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(`CoinGecko API returned status ${response.status}`);
+      }
+
+      return response.data as CryptoCurrency[];
+    } catch (error) {
+      logger.error(`Error fetching cryptocurrency data by IDs: ${error}`);
+
+      // Handle rate limiting explicitly
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
+        logger.error('CoinGecko API rate limit exceeded. Consider using an API key.');
+      }
+
+      return [];
     }
   }
 }

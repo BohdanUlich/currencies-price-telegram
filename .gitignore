@@ -39,3 +39,14 @@ Thumbs.db
 # Test coverage
 coverage/
 .nyc_output/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/

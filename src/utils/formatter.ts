@@ -1,4 +1,10 @@
-import { CryptoCurrency } from "../services/coingecko";
+import { CryptoCurrency } from '../services/coingecko';
+import { ChannelLink } from '../types';
+
+interface FormatCryptoMessageParams {
+  cryptoData: CryptoCurrency[];
+  links?: ChannelLink[];
+}
 
 export class CryptoFormatter {
   /**
@@ -6,50 +12,32 @@ export class CryptoFormatter {
    * @param cryptoData Array of cryptocurrency data
    * @returns Formatted HTML message
    */
-  formatCryptoMessage(cryptoData: CryptoCurrency[]): string {
-    const now = new Date();
-    const dateStr = now.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    // Create header
-    let message = `<b>🔥 Top 30 Cryptocurrencies 🔥</b>\n`;
-    message += `<i>Updated: ${dateStr}</i>\n\n`;
+  formatCryptoMessage({ cryptoData, links }: FormatCryptoMessageParams): string {
+    let message = '';
 
     // Format each cryptocurrency
     cryptoData.forEach((crypto, index) => {
       // Select emoji based on price movement
-      const priceChangeEmoji = this.getPriceChangeEmoji(
-        crypto.price_change_percentage_24h
-      );
+      const priceChangeEmoji = this.getPriceChangeEmoji(crypto.price_change_percentage_24h);
 
-      // Format price with appropriate precision
-      const formattedPrice = this.formatPrice(crypto.current_price);
-
-      // Format 24h change with sign and percentage
       const change24h = crypto.price_change_percentage_24h.toFixed(2);
-      const changeSign = crypto.price_change_percentage_24h >= 0 ? "+" : "";
+      const changeSign = crypto.price_change_percentage_24h >= 0 ? '+' : '';
+      const currentPrice = this.formatPrice(crypto.current_price);
 
       // Add cryptocurrency to message
-      message += `${index + 1}. <b>${
-        crypto.name
-      }</b> (${crypto.symbol.toUpperCase()}) ${priceChangeEmoji}\n`;
-      message += `   💲 $${formattedPrice} | 24h: ${changeSign}${change24h}%\n`;
-
-      // Add separator except for the last item
-      if (index < cryptoData.length - 1) {
-        message += "\n";
-      }
+      message += `${index + 1}. <b>${crypto.symbol.toUpperCase()}</b> | <b>$${currentPrice}</b> | 24h: <b>${changeSign}${change24h}%</b> ${priceChangeEmoji}\n\n`;
     });
 
+    // Add links to other channels if provided
+    if (links && links.length > 0) {
+      message +=
+        '\n' +
+        links.map((link) => `<a href="https://t.me/${link.id}">${link.name}</a>`).join(' | ') +
+        '\n\n';
+    }
+
     // Add footer with hashtags for promotion
-    message += "\n\n";
-    message += `#crypto #cryptocurrency #cryptomarket #cryptonews #blockchain #bitcoin #ethereum #trading`;
+    message += `#crypto #btc #bitcoin #ethereum #trading #биткоин #крипта #криптовалюта`;
 
     return message;
   }
@@ -60,12 +48,9 @@ export class CryptoFormatter {
    * @returns Emoji representing the price movement
    */
   private getPriceChangeEmoji(priceChange: number): string {
-    if (priceChange >= 10) return "🚀";
-    if (priceChange >= 5) return "⬆️";
-    if (priceChange >= 0) return "📈";
-    if (priceChange >= -5) return "📉";
-    if (priceChange >= -10) return "⬇️";
-    return "🔻";
+    if (priceChange >= 20) return '🚀';
+    if (priceChange >= 0) return '🟢';
+    return '🔻';
   }
 
   /**
@@ -74,23 +59,6 @@ export class CryptoFormatter {
    * @returns Formatted price string
    */
   private formatPrice(price: number): string {
-    if (price >= 1000) {
-      return price.toLocaleString("en-US", { maximumFractionDigits: 2 });
-    } else if (price >= 1) {
-      return price.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 4,
-      });
-    } else if (price >= 0.01) {
-      return price.toLocaleString("en-US", {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 6,
-      });
-    } else {
-      return price.toLocaleString("en-US", {
-        minimumFractionDigits: 6,
-        maximumFractionDigits: 8,
-      });
-    }
+    return price.toLocaleString('ru', { maximumFractionDigits: 4 });
   }
 }
