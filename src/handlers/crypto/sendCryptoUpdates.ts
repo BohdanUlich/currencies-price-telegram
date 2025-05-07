@@ -1,6 +1,6 @@
 import { cryptoChannels } from '../../config/channels';
 import { coinGeckoClient } from '../../lib/dependencies';
-import { CRYPTO_LIST_TYPE, TOP_CRYPTO_TYPE } from '../../types';
+import { CRYPTO_LIST_TYPE, TOP_CRYPTO_MEME_TYPE, TOP_CRYPTO_TYPE } from '../../types';
 import { logger } from '../../utils/logger';
 import { sendMessageToChannel } from './sendMessageToChannel';
 
@@ -40,6 +40,17 @@ export const sendCryptoUpdates = async () => {
 
           if (!cryptoData?.length) {
             logger.error(`Failed to fetch cryptocurrency data by IDs for channel: ${channel.name}`);
+            continue;
+          }
+
+          await sendMessageToChannel({ cryptoData, channelId, channelLinks, channelName });
+        }
+
+        if (channel.type === TOP_CRYPTO_MEME_TYPE) {
+          const cryptoData = await coinGeckoClient.getTopMemeCoins(channel.limit);
+
+          if (!cryptoData?.length) {
+            logger.error(`Failed to fetch meme coin data for channel: ${channel.name}`);
             continue;
           }
 

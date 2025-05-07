@@ -56,6 +56,8 @@ export class CryptoFormatter {
    * @returns Formatted price string
    */
   private formatCryptoPrice(price: number): string {
+    if (price < 0.001) return price.toLocaleString('ru', { maximumFractionDigits: 8 });
+
     return price.toLocaleString('ru', { maximumFractionDigits: 4 });
   }
 }

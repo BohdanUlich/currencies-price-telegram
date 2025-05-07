@@ -1,4 +1,4 @@
-import { CRYPTO_LIST_TYPE, CryptoChannel, TOP_CRYPTO_TYPE } from '../types';
+import { CRYPTO_LIST_TYPE, TOP_CRYPTO_MEME_TYPE, CryptoChannel, TOP_CRYPTO_TYPE } from '../types';
 
 export const cryptoChannels: CryptoChannel[] = [
   {
@@ -8,6 +8,7 @@ export const cryptoChannels: CryptoChannel[] = [
     type: TOP_CRYPTO_TYPE,
     links: [
       { name: 'Best crypto prices', id: 'bestcryptoprices' },
+      { name: 'Top meme coin prices', id: 'topmemecoinprices' },
       { name: 'Top 10 crypto prices', id: 'top10cryptoprice' },
       { name: 'Top 20 crypto prices', id: 'top20cryptoprice' },
     ],
@@ -19,6 +20,7 @@ export const cryptoChannels: CryptoChannel[] = [
     type: TOP_CRYPTO_TYPE,
     links: [
       { name: 'Best crypto prices', id: 'bestcryptoprices' },
+      { name: 'Top meme coin prices', id: 'topmemecoinprices' },
       { name: 'Top 10 crypto prices', id: 'top10cryptoprice' },
       { name: 'Top 30 crypto prices', id: 'top30cryptoprice' },
     ],
@@ -30,6 +32,7 @@ export const cryptoChannels: CryptoChannel[] = [
     type: TOP_CRYPTO_TYPE,
     links: [
       { name: 'Best crypto prices', id: 'bestcryptoprices' },
+      { name: 'Top meme coin prices', id: 'topmemecoinprices' },
       { name: 'Top 20 crypto prices', id: 'top20cryptoprice' },
       { name: 'Top 30 crypto prices', id: 'top30cryptoprice' },
     ],
@@ -37,9 +40,10 @@ export const cryptoChannels: CryptoChannel[] = [
   {
     name: 'Best crypto prices',
     id: '@bestcryptoprices',
-    limit: 10,
+    limit: 100,
     type: CRYPTO_LIST_TYPE,
     links: [
+      { name: 'Top meme coin prices', id: 'topmemecoinprices' },
       { name: 'Top 10 crypto prices', id: 'top10cryptoprice' },
       { name: 'Top 20 crypto prices', id: 'top20cryptoprice' },
       { name: 'Top 30 crypto prices', id: 'top30cryptoprice' },
@@ -55,6 +59,18 @@ export const cryptoChannels: CryptoChannel[] = [
       'ethereum-classic',
       'binancecoin',
       'the-open-network',
+    ],
+  },
+  {
+    name: 'Top meme coin prices',
+    id: '@topmemecoinprices',
+    limit: 20,
+    type: TOP_CRYPTO_MEME_TYPE,
+    links: [
+      { name: 'Best crypto prices', id: 'bestcryptoprices' },
+      { name: 'Top 10 crypto prices', id: 'top10cryptoprice' },
+      { name: 'Top 20 crypto prices', id: 'top20cryptoprice' },
+      { name: 'Top 30 crypto prices', id: 'top30cryptoprice' },
     ],
   },
 ];
