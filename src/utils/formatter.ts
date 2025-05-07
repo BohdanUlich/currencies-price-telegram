@@ -1,5 +1,4 @@
-import { CryptoCurrency } from '../services/coingecko';
-import { ChannelLink } from '../types';
+import { ChannelLink, CryptoCurrency } from '../types';
 
 interface FormatCryptoMessageParams {
   cryptoData: CryptoCurrency[];
@@ -17,12 +16,10 @@ export class CryptoFormatter {
 
     // Format each cryptocurrency
     cryptoData.forEach((crypto, index) => {
-      // Select emoji based on price movement
-      const priceChangeEmoji = this.getPriceChangeEmoji(crypto.price_change_percentage_24h);
-
+      const priceChangeEmoji = this.getCryptoPriceChangeEmoji(crypto.price_change_percentage_24h);
       const change24h = crypto.price_change_percentage_24h.toFixed(2);
       const changeSign = crypto.price_change_percentage_24h >= 0 ? '+' : '';
-      const currentPrice = this.formatPrice(crypto.current_price);
+      const currentPrice = this.formatCryptoPrice(crypto.current_price);
 
       // Add cryptocurrency to message
       message += `${index + 1}. <b>${crypto.symbol.toUpperCase()}</b> | <b>$${currentPrice}</b> | 24h: <b>${changeSign}${change24h}%</b> ${priceChangeEmoji}\n\n`;
@@ -47,7 +44,7 @@ export class CryptoFormatter {
    * @param priceChange 24-hour price change percentage
    * @returns Emoji representing the price movement
    */
-  private getPriceChangeEmoji(priceChange: number): string {
+  private getCryptoPriceChangeEmoji(priceChange: number): string {
     if (priceChange >= 20) return '🚀';
     if (priceChange >= 0) return '🟢';
     return '🔻';
@@ -58,7 +55,7 @@ export class CryptoFormatter {
    * @param price Price in USD
    * @returns Formatted price string
    */
-  private formatPrice(price: number): string {
+  private formatCryptoPrice(price: number): string {
     return price.toLocaleString('ru', { maximumFractionDigits: 4 });
   }
 }
